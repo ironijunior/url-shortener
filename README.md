@@ -1,7 +1,7 @@
 # url-shortener
 
 ## USEFUL INFORMATION
-- current using an H2 database[
+- current using an H2 database
 - to run as a Docker Image run the command `docker build .` inside the root directory
 
 ## HOW IT WORKS

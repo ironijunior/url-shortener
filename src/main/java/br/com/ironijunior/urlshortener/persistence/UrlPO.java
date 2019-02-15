@@ -16,10 +16,10 @@ public class UrlPO {
 
 	private String url;
 
-	private String shortenUrl;
+	private String shortenedUrl;
 
-	private Integer numberOfGets;
+	private Integer hits;
 
-	private Date lastGet;
+	private Date lastHit;
 
 }

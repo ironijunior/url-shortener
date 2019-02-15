@@ -1,9 +1,15 @@
 package br.com.ironijunior.urlshortener.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.validation.Valid;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,10 +39,21 @@ public class ShortenerController {
     }
 	
 	@GetMapping(path="/{id}")
-	public UrlPO getShortenedUrl(
-			@PathVariable(required=true) String id) throws InvalidURLException {
+	public ResponseEntity<Object> getShortenedUrl(
+			@PathVariable(required=true) String id) throws InvalidURLException, URISyntaxException {
 		
-		return shortenerService.getShortened(id);
+		UrlPO urlPO = shortenerService.getShortened(id);
+		URI url = new URI(urlPO.getUrl());
+	    HttpHeaders httpHeaders = new HttpHeaders();
+	    httpHeaders.setLocation(url);
+	    return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+	}
+	
+	@GetMapping(path="/{id}/stats")
+	public UrlPO getStatsUrl(
+			@PathVariable(required=true) String id) throws InvalidURLException, URISyntaxException {
+		
+		return shortenerService.getShortened(id, false);
 	}
 	
 }

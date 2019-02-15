@@ -19,32 +19,39 @@ public class ShortenerService {
 	public UrlPO shortUrl(UrlPO url) throws InvalidURLException {
 		String id = generateId(url.getUrl());
 		if(urlRepo.existsById(id)) {
-			return getShortened(id);
+			return getShortened(id, false);
 		}
 		url.setId(id);
-		url.setShortenUrl(transformUrl(id));
+		url.setHits(0);
+		url.setShortenedUrl(transformUrl(id));
 		
 		return urlRepo.save(url);
 	}
 
-	public UrlPO getShortened(String id) throws InvalidURLException {
+	public UrlPO getShortened(String id, boolean countStats) throws InvalidURLException {
 		Optional<UrlPO> urlOpt = urlRepo.findById(id);
 		if(urlOpt.isPresent()) {
 			UrlPO url = urlOpt.get();
-			url = setStatistics(url);
+			if(countStats) {
+				url = setStatistics(url);
+			}
 			return url;
 		} else {
 			throw new InvalidURLException();
 		}
 	}
+	
+	public UrlPO getShortened(String id) throws InvalidURLException {
+		return getShortened(id, true);
+	}
 
 	private synchronized UrlPO setStatistics(UrlPO url) {
 		Integer nGets = 0;
-		if(url.getNumberOfGets() != null) {
-			nGets = url.getNumberOfGets();
+		if(url.getHits() != null) {
+			nGets = url.getHits();
 		}
-		url.setNumberOfGets(nGets + 1);
-		url.setLastGet(new Date());
+		url.setHits(nGets + 1);
+		url.setLastHit(new Date());
 		
 		return urlRepo.save(url);
 	}

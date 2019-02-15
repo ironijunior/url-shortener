@@ -2,11 +2,15 @@
 
 ## USEFUL INFORMATION
 - current using H2 database
-- to run as a Docker Image run the command `docker build -t url-shortener . && docker run -p 8080:8080 -it url-shortener` inside the root directory
+- to run as a Docker Image, execute in root directory:
+
+```sh
+docker build -t url-shortener . && docker run -p 8080:8080 -it url-shortener
+```
 
 ## HOW IT WORKS
 ### [POST] to `/short`
-- passing in the body an Json object with the url to short, like:
+- passing in the body a Json object with the url to short, like:
 
 ```json
 {
@@ -14,7 +18,11 @@
 }
 ```
 
-- returns the shortened url and its statistics, like:
+SAMPLE:
+
+![](https://uploaddeimagens.com.br/images/001/901/343/full/post.PNG?1550254082)
+
+- returns a Json object containing the shortened url and its statistics, like:
 
 ```json
 {
@@ -25,23 +33,32 @@
     "lastHit": null
 }
 ```
-
-- shortened url contains the URL that redirects to the original link
-
 SAMPLE:
 
-![](http://uploaddeimagens.com.br/images/001/844/422/full/POST.PNG?1547935410)
+![](https://uploaddeimagens.com.br/images/001/901/353/full/post_result.PNG?1550254208)
+
 
 ### [GET] to `/{id}`
 - redirects to the original url link
 
 
+### [GET] to `/{id}/stats`
+- retrieves a Json object containing the statistics about the shortened url, like:
+
+```json
+{
+    "id": "573319227",
+    "url": "https://github.com/ironijunior/url-shortener",
+    "shortenedUrl": "localhost:8080/573319227",
+    "hits": 3,
+    "lastHit": "2019-02-15T18:02:01.840+0000"
+}
+```
+
 SAMPLE:
 
-![](http://uploaddeimagens.com.br/images/001/844/429/full/GET.PNG?1547935524)
-
-### [GET] to `/{id}/stats`
-- retrieves the statistics about the shortened url, like
+![](https://uploaddeimagens.com.br/images/001/901/375/full/get_stats.PNG?1550254400)
+![](https://uploaddeimagens.com.br/images/001/901/377/full/stats_result.PNG?1550254424)
 
 ## TODO:
 - add an efficient method of url encoding
